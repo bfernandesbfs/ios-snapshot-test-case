@@ -39,14 +39,34 @@
     _snapshotController.recordMode = recordMode;
 }
 
-- (NSBundle *)bundleResourcePath
+- (nullable NSString *)bundleResourcePath
 {
     return _snapshotController.bundleResourcePath;
 }
 
-- (void)setBundleResourcePath:(NSBundle *)bundleResourcePath
+- (void)setBundleResourcePath:(nullable NSString *)bundleResourcePath
 {
     _snapshotController.bundleResourcePath = bundleResourcePath;
+}
+
+- (nullable NSString *)referenceImagesPath
+{
+    return _snapshotController.referenceImagesPath;
+}
+
+- (void)setReferenceImagesPath:(nullable NSString *)referenceImagesPath
+{
+    _snapshotController.referenceImagesPath = referenceImagesPath;
+}
+
+- (nullable NSString *)diffImagesPath
+{
+    return _snapshotController.diffImagesPath;
+}
+
+- (void)setDiffImagesPath:(nullable NSString *)diffImagesPath
+{
+    _snapshotController.diffImagesPath = diffImagesPath;
 }
 
 - (FBSnapshotTestCaseFileNameIncludeOption)fileNameOptions
@@ -252,13 +272,13 @@
     if (dir && dir.length > 0) {
         return dir;
     }
-    NSString* _Nonnull bundleResourcePath;
-    if (_snapshotController.bundleResourcePath == nil) {
-        bundleResourcePath = [NSBundle bundleForClass:self.class].resourcePath;
+    if (_snapshotController.bundleResourcePath != nil) {
+        return [_snapshotController.bundleResourcePath stringByAppendingPathComponent: @"ReferenceImages"];
+    } else if (_snapshotController.referenceImagesPath != nil) {
+        return _snapshotController.referenceImagesPath;
     } else {
-        bundleResourcePath = _snapshotController.bundleResourcePath;
+        return [[NSBundle bundleForClass: self.class].resourcePath stringByAppendingPathComponent: @"ReferenceImages"];
     }
-    return [bundleResourcePath stringByAppendingPathComponent:@"ReferenceImages"];
 }
 
 - (NSString *)getImageDiffDirectoryWithDefault:(NSString *)dir
@@ -269,6 +289,9 @@
     }
     if (dir && dir.length > 0) {
         return dir;
+    }
+    if (_snapshotController.diffImagesPath != nil) {
+        return _snapshotController.diffImagesPath;
     }
     return NSTemporaryDirectory();
 }

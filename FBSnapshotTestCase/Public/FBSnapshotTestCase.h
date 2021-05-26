@@ -21,8 +21,9 @@
     c-string with the path. This only works for Objective-C tests.
  2. Set an environment variable named FB_REFERENCE_IMAGE_DIR with the path. This
     takes precedence over the preprocessor macro to allow for run-time override.
- 3. Set `FBSnapshotTestCase.bundleResourcePath` as the root folder where reference images are stored.
- 4. Keep everything unset, which will cause the reference images to be looked up
+ 3. Set `FBSnapshotTestCase.bundleResourcePath` as the bundle path where the reference image folder is stored.
+ 4. Set `FBSnapshotTestCase.referenceImagesPath` as the reference image folder.
+ 5. Keep everything unset, which will cause the reference images to be looked up
     inside the bundle holding the current test, in the
     Resources/ReferenceImages_* directories.
  */
@@ -37,7 +38,8 @@
  c-string with the path.
  2. Set an environment variable named IMAGE_DIFF_DIR with the path. This
  takes precedence over the preprocessor macro to allow for run-time override.
- 3. Keep everything unset, which will cause the failed image diff images to be saved
+ 3. Set `FBSnapshotTestCase.diffImagesPath` as the diff images folder.
+ 4. Keep everything unset, which will cause the failed image diff images to be saved
  inside a temporary directory.
  */
 #ifndef IMAGE_DIFF_DIR
@@ -135,12 +137,24 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (readwrite, nonatomic, assign) BOOL recordMode;
 
+/**
+The bundleResourcePath can be manually set to the bundle path where the reference image folder is stored.
+If the bundle is not set via FB_REFERENCE_IMAGE_DIR (Steps 1, 2 stated above) then it checks if bundleResourcePath is set. This is useful for testing in swift without schemes
+ */
+
+@property (readwrite, nonatomic, copy, nullable) NSString *bundleResourcePath;
 
 /**
- The bundleResourcePath can be manually set to the root folder where reference images are stored.
- If the bundle is not set via FB_REFERENCE_IMAGE_DIR (Steps 1, 2 stated above) then it checks if bundleResourcePath is set. This is useful for testing with SPM
+ The referenceImagesPath can be manually set as the reference image folder.
+ If the bundle is not set via FB_REFERENCE_IMAGE_DIR and bundleResourcePath (Steps 1, 2, 3 stated above) then it checks if referenceImagesPath is set. This is useful for testing in swift without schemes
  */
-@property (readwrite, nonatomic, copy, nullable) NSString *bundleResourcePath;
+@property (readwrite, nonatomic, copy, nullable) NSString *referenceImagesPath;
+
+/**
+ The diffImagesPath can be manually set as the folder where diff images are stored.
+ If the bundle is not set via IMAGE_DIFF_DIR (Steps 1, 2 stated above) then it checks if diffImagesPath is set. This is useful for testing in swift without schemes
+ */
+@property (readwrite, nonatomic, copy, nullable) NSString *diffImagesPath;
 
 /**
  When set, allows fine-grained control over what you want the file names to include.
