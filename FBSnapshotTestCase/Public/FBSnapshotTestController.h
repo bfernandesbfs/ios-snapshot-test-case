@@ -58,9 +58,19 @@ extern NSString *const FBDiffedImageKey;
 @property (readwrite, nonatomic, assign) BOOL recordMode;
 
 /**
- The bundleResourcePath can be manually set to the root folder where reference images are stored.
- */
+ The bundleResourcePath can be manually set to the bundle path where reference image folder is stored.
+*/
 @property (readwrite, nonatomic, copy, nullable) NSString *bundleResourcePath;
+
+/**
+ The referenceImagesPath can be manually set as the reference images folder.
+ */
+@property (readwrite, nonatomic, copy, nullable) NSString *referenceImagesPath;
+
+/**
+ The diffImagesPath can be manually set as the diff images folder.
+ */
+@property (readwrite, nonatomic, copy, nullable) NSString *diffImagesPath;
 
 /**
  When set, allows fine-grained control over what you want the file names to include.
